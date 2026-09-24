@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoo</title>
+  <link rel="stylesheet" href="style.css">
+
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Zoo</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Header Grid -->
+  <header class="header-grid">
+    <div class="logo-cell">
+      <a href="index.html"> <img class="logo-img" src="imgs/logo2.png" alt="Zoo"></a>
+    </div>
+
+    <nav class="nav-container">
+     <a class="nav-cell" href="catalogo.html"><span class="nav-label">catálogo</span></a>
+      <a class="nav-cell" href="sobre.html"><span class="nav-label">sobre</span></a>
+      <a class="nav-cell cesto-trigger" href="cesto.html"><span class="nav-label">cesto</span></a>
+      <div class="search-cell">
+        <input type="text" class="search-input" />
+        <span class="search-icon"><img class="search-icon-img" src="imgs/Search.png" alt="Search"></span>
+      </div>
+    </nav>
+  </header>
+
+  <div class="grid grid-tall">
+    <div class="shortcolumn column"></div>
+    <div class="shortcolumn column"></div>
+    <div class="column tall"></div>
+    <div class="column tall"></div>
+    <div class="column tall"></div>
+    <div class="column tall"></div>
+    <div class="column tall"></div>
+    <div class="column tall"></div>
+
+
+    <!-- Placeholder image -->
+    <div class="card card-sobre-image"></div>
+
+    <!-- Text block, top right -->
+    <div class="card card-sobre-text-top">
+      <p>
+        A Zoo nasceu da vontade de reunir, num só espaço, livros e música que
+        atravessam fronteiras entre géneros e décadas. Trabalhamos com
+        autores, editoras e labels independentes que partilham a mesma
+        curiosidade pelo pouco comum.
+      </p>
+      <p>
+        Cada peça do catálogo é escolhida à mão — nada de listas automáticas
+        nem algoritmos de recomendação. Acreditamos que ler e ouvir são
+        atos de atenção, e que vale a pena esperar por uma boa descoberta.
+      </p>
+    </div>
+
+    <!-- Text block, bottom left, under the image -->
+    <div class="card card-sobre-text-bottom">
+      <p>
+        Com sede no Porto, a Zoo funciona também como espaço físico de
+        encontro: sessões de leitura, lançamentos de discos e conversas com
+        autores acontecem regularmente na nossa morada. Consulte o
+        calendário de eventos ou escreva-nos diretamente — respondemos
+        sempre.
+      </p>
+    </div>
+  </div>
+
+  <!-- CART BACKDROP -->
+  <div class="cesto-backdrop" id="cestoBackdrop"></div>
+
+  <!-- CART DRAWER -->
+  <aside class="cesto-drawer" id="cestoDrawer" aria-hidden="true">
+
+    <div class="cesto-drawer-header">
+
+      <h2>cesto</h2>
+
+      <button type="button" class="cesto-drawer-close" id="cestoClose" aria-label="Fechar cesto">
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="cesto-drawer-body" id="cestoBody">
+
+      <div class="cesto-empty" id="cestoEmpty">
+        <p>
+          ups!<br>
+          Não tens nada no cesto.
+        </p>
+
+        <a href="catalogo.html">
+          ver catálogo
+        </a>
+      </div>
+
+
+      <div id="cestoItems"></div>
+
+    </div>
+
+
+    <div class="cesto-drawer-footer">
+
+      <div class="summary-line">
+        <span>Subtotal</span>
+        <span id="cestoSubtotal">0,00€</span>
+      </div>
+
+      <div class="summary-line">
+        <span>Portes</span>
+        <span id="cestoShipping">0,00€</span>
+      </div>
+
+      <div class="summary-line total">
+        <span>Total</span>
+        <span class="amount" id="cestoTotal">
+          0,00€
+        </span>
+      </div>
+
+      <button type="button" class="checkout-btn" id="checkoutBtn">
+        finalizar compra
+      </button>
+
+    </div>
+
+  </aside>
+
+
+
+  <footer class="footer-grid">
+    <div class="footer-col contact">
+      <span class="footer-label">Contacto:</span>
+      <a href="mailto:zoologiaexperimental@gmail.com" class="footer-value">zoologiaexperimental@gmail.com</a>
+    </div>
+    <nav class="footer-nav">
+      <a href="catalogo.html">catálogo</a>
+      <a href="sobre.html">sobre</a>
+      <a href="#" class="cesto-trigger">cesto</a>
+    </nav>
+  </footer>
+  <script src="main.js"></script>
+</body>
+
+</html>

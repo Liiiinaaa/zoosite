@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoo</title>
+  <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body id="page-catalogo">
+
+  <!-- Header Grid -->
+  <header class="header-grid">
+    <div class="logo-cell">
+      <a href="index.html"> <img class="logo-img" src="imgs/logo2.png" alt="Zoo"></a>
+    </div>
+
+    <nav class="nav-container">
+      <a class="nav-cell" href="catalogo.html"><span class="nav-label">catálogo</span></a>
+      <a class="nav-cell" href="sobre.html"><span class="nav-label">sobre</span></a>
+      <a class="nav-cell cesto-trigger" href="cesto.html"><span class="nav-label">cesto</span></a>
+      <div class="search-cell">
+        <input type="text" class="search-input" />
+        <span class="search-icon"><img class="search-icon-img" src="imgs/search.png" alt="Search"></span>
+      </div>
+    </nav>
+  </header>
+
+  <div class="grid" id="catalogGrid">
+    <div class="shortcolumn column"></div>
+    <div class="shortcolumn column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+
+    <!-- Filtros toggle -->
+    <div class="card card-filtros">
+      <button class="filtros-toggle" id="filtrosToggle" aria-expanded="false">
+        Filtros <span class="arrow">&#8964;</span>
+      </button>
+    </div>
+
+    <!-- Filter fields, hidden until toggled -->
+    <div class="card card-filter-fields" id="filterFields">
+
+      <div class="filter-field filter-select" data-filter="tipo">
+        <button class="filter-select-btn" type="button">Tipo</button>
+        <ul class="filter-select-options">
+          <li data-value="livro">Livro</li>
+          <li data-value="disco">Disco</li>
+        </ul>
+      </div>
+
+      <div class="filter-field filter-select" data-filter="genero">
+        <button class="filter-select-btn" type="button">Gênero</button>
+        <ul class="filter-select-options">
+          <li data-value="ficcao">Ficção</li>
+          <li data-value="poesia">Poesia</li>
+          <li data-value="nao-ficcao">Não-ficção</li>
+          <li data-value="infantil">Infantil</li>
+          <li data-value="ensaio">Ensaio</li>
+        </ul>
+      </div>
+
+      <div class="filter-field filter-select" data-filter="autor">
+        <button class="filter-select-btn" type="button">Autor</button>
+        <ul class="filter-select-options">
+          <li data-value="jose-campos">José Campos</li>
+          <li data-value="a-dasilva">A. Dasilva O.</li>
+          <!-- add more authors -->
+        </ul>
+      </div>
+
+      <div class="filter-field filter-select" data-filter="ano">
+        <button class="filter-select-btn" type="button">Ano</button>
+        <ul class="filter-select-options">
+          <li data-value="2026">2026</li>
+          <li data-value="2025">2025</li>
+          <li data-value="2024">2024</li>
+          <li data-value="2023">2023</li>
+          <li data-value="2022">2022</li>
+        </ul>
+      </div>
+
+      <div class="filter-field filter-select" data-filter="editora">
+        <button class="filter-select-btn" type="button">Editora</button>
+        <ul class="filter-select-options">
+          <li data-value="editora-a">Editora A</li>
+          <li data-value="editora-b">Editora B</li>
+        </ul>
+      </div>
+
+      <div class="filter-field filter-select" data-filter="label">
+        <button class="filter-select-btn" type="button">Label</button>
+        <ul class="filter-select-options">
+          <li data-value="novo">Novo</li>
+          <li data-value="promocao">Promoção</li>
+          <li data-value="esgotado">Esgotado</li>
+        </ul>
+      </div>
+
+      <div class="filter-field filter-select" data-filter="preco">
+        <button class="filter-select-btn" type="button">Preço</button>
+        <ul class="filter-select-options">
+          <li data-value="0-10">até 10€</li>
+          <li data-value="10-20">10€ – 20€</li>
+          <li data-value="20-30">20€ – 30€</li>
+          <li data-value="30+">30€ +</li>
+        </ul>
+      </div>
+
+      <div class="filter-field filter-select" data-filter="relevancia">
+        <button class="filter-select-btn" type="button">Relevância</button>
+        <ul class="filter-select-options">
+          <li data-value="popular">Mais popular</li>
+          <li data-value="recente">Mais recente</li>
+          <li data-value="preco-asc">Preço: menor</li>
+          <li data-value="preco-desc">Preço: maior</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Row 1: three product cards -->
+    <div class="card card-product" style="top:520px; left:6.7%; width:calc(25% + 4px); margin-left:-2px;">
+      <a href="item.html">
+        <p class="product-price">15.99€</p>
+        <img class="product-cover" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=450&fit=crop"
+          alt="Música dos Séculos">
+        <p class="product-title">Música dos Séculos<br>de José Campos</p>
+      </a>
+    </div>
+
+    <div class="card card-product" style="top:520px; left:37.8%; width:calc(24.5% + 4px); margin-left:-2px;">
+      <a href="item.html">
+        <p class="product-price">15.99€</p>
+        <img class="product-cover"
+          src="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?w=300&h=450&fit=crop"
+          alt="E a poesia dá à luz uma bússola louca">
+        <p class="product-title">E a poesia dá à luz uma bussola louca<br>A.Dasilva O.</p>
+      </a>
+    </div>
+
+
+    <div class="card card-product" style="top:520px; left:68.5%; width:calc(25% + 4px); margin-left:-2px;">
+      <a href="item.html">
+        <p class="product-price">15.99€</p>
+        <img class="product-cover"
+          src="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?w=300&h=450&fit=crop"
+          alt="E a poesia dá à luz uma bússola louca">
+        <p class="product-title">E a poesia dá à luz uma bussola louca<br>A.Dasilva O.</p>
+      </a>
+    </div>
+
+    <!-- Row 2: three product cards -->
+    <div class="card card-product" style="top:960px; left:6.7%; width:calc(25% + 4px); margin-left:-2px;">
+      <a href="item.html">
+        <p class="product-price">15.99€</p>
+        <img class="product-cover" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=450&fit=crop"
+          alt="Música dos Séculos">
+        <p class="product-title">Música dos Séculos<br>de José Campos</p>
+      </a>
+    </div>
+
+    <div class="card card-product" style="top:960px; left:37.8%; width:calc(24.5% + 4px); margin-left:-2px;">
+      <a href="item.html">
+        <p class="product-price">15.99€</p>
+        <img class="product-cover"
+          src="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?w=300&h=450&fit=crop"
+          alt="E a poesia dá à luz uma bússola louca">
+        <p class="product-title">E a poesia dá à luz uma bussola louca<br>A.Dasilva O.</p>
+      </a>
+    </div>
+
+    <div class="card card-product" style="top:960px; left:68.5%; width:calc(25% + 4px); margin-left:-2px;">
+      <a href="item.html">
+        <p class="product-price">15.99€</p>
+        <img class="product-cover"
+          src="https://images.unsplash.com/photo-1519791883288-dc8bd696e667?w=300&h=450&fit=crop"
+          alt="E a poesia dá à luz uma bússola louca">
+        <p class="product-title">E a poesia dá à luz uma bussola louca<br>A.Dasilva O.</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- CART BACKDROP -->
+  <div class="cesto-backdrop" id="cestoBackdrop"></div>
+
+  <!-- CART DRAWER -->
+  <aside class="cesto-drawer" id="cestoDrawer" aria-hidden="true">
+
+    <div class="cesto-drawer-header">
+
+      <h2>cesto</h2>
+
+      <button type="button" class="cesto-drawer-close" id="cestoClose" aria-label="Fechar cesto">
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="cesto-drawer-body" id="cestoBody">
+
+      <div class="cesto-empty" id="cestoEmpty">
+        <p>
+          ups!<br>
+          Não tens nada no cesto.
+        </p>
+
+        <a href="catalogo.html">
+          ver catálogo
+        </a>
+      </div>
+
+
+      <div id="cestoItems"></div>
+
+    </div>
+
+
+    <div class="cesto-drawer-footer">
+
+      <div class="summary-line">
+        <span>Subtotal</span>
+        <span id="cestoSubtotal">0,00€</span>
+      </div>
+
+      <div class="summary-line">
+        <span>Portes</span>
+        <span id="cestoShipping">0,00€</span>
+      </div>
+
+      <div class="summary-line total">
+        <span>Total</span>
+        <span class="amount" id="cestoTotal">
+          0,00€
+        </span>
+      </div>
+
+      <button type="button" class="checkout-btn" id="checkoutBtn">
+        finalizar compra
+      </button>
+
+    </div>
+
+  </aside>
+
+
+
+  <footer class="footer-grid">
+    <div class="footer-col contact">
+      <span class="footer-label">Contacto:</span>
+      <a href="mailto:zoologiaexperimental@gmail.com" class="footer-value">zoologiaexperimental@gmail.com</a>
+    </div>
+    <nav class="footer-nav">
+      <a href="catalogo.html">catálogo</a>
+      <a href="sobre.html">sobre</a>
+      <a href="#" class="cesto-trigger">cesto</a>
+    </nav>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+
+</html>

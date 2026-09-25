@@ -1107,6 +1107,9 @@ body.cesto-open {
   cursor: not-allowed;
 }
 
+#addToCartBtn.checkout-btn {
+  width: calc(25.75% + 4px);
+}
 
 /* MOBILE */
 

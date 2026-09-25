@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body id="page-item">
+
+  <!-- Header Grid -->
+  <header class="header-grid">
+
+    <div class="logo-cell">
+      <a href="index.html">
+        <img class="logo-img" src="imgs/logo2.png" alt="Zoo">
+      </a>
+    </div>
+
+    <nav class="nav-container">
+
+ <a class="nav-cell" href="catalogo.html"><span class="nav-label">catálogo</span></a>
+      <a class="nav-cell" href="sobre.html"><span class="nav-label">sobre</span></a>
+      <a class="nav-cell cesto-trigger" href="cesto.html"><span class="nav-label">cesto</span></a>
+
+      <div class="search-cell">
+        <input type="text" class="search-input">
+
+        <span class="search-icon">
+          <img class="search-icon-img" src="imgs/search.png" alt="Search">
+        </span>
+      </div>
+
+    </nav>
+
+  </header>
+
+
+  <!-- Main Poster Grid (8 Columns) -->
+  <div class="grid" id="itemGrid">
+
+    <div class="shortcolumn column"></div>
+    <div class="shortcolumn column"></div>
+
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+    <div class="column"></div>
+
+
+    <!-- Title -->
+    <div class="card card-item-title">
+
+      <h1 id="itemTitle">
+        Um bom titulo
+      </h1>
+
+      <p id="itemAuthor">
+        Uno Boenoaut Ortede
+      </p>
+
+    </div>
+
+
+    <!-- Cover image -->
+    <div class="card card-item-cover">
+
+      <img id="itemCover" src="" alt="">
+
+    </div>
+
+
+    <!-- Description -->
+    <div class="card card-item-description-top" id="itemDescriptionTop">
+      <!-- filled by JS -->
+    </div>
+
+
+    <!-- Specs table -->
+    <div class="card card-item-specs">
+
+      <div class="spec-row">
+
+        <span class="spec-label">
+          label
+        </span>
+
+        <span class="spec-value" id="specLabel">
+          —
+        </span>
+
+      </div>
+
+
+      <div class="spec-row">
+
+        <span class="spec-label">
+          publisher
+        </span>
+
+        <span class="spec-value" id="specPublisher">
+          —
+        </span>
+
+      </div>
+
+
+      <div class="spec-row">
+
+        <span class="spec-label">
+          discogs
+        </span>
+
+        <a class="spec-value" id="specLink" href="#">
+          link
+        </a>
+      </div>
+    </div>
+
+
+    <!-- Add to cart -->
+    <button type="button" id="addToCartBtn" class="card-item-add-btn checkout-btn">
+      adicionar ao cesto
+    </button>
+
+
+
+
+  </div>
+
+  <!-- =====================================================
+       CART BACKDROP
+       ===================================================== -->
+
+  <div class="cesto-backdrop" id="cestoBackdrop"></div>
+
+
+  <!-- =====================================================
+       CART DRAWER
+       ===================================================== -->
+
+  <aside class="cesto-drawer" id="cestoDrawer" aria-hidden="true">
+
+    <div class="cesto-drawer-header">
+
+      <h2>cesto</h2>
+
+      <button type="button" class="cesto-drawer-close" id="cestoClose" aria-label="Fechar cesto">
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="cesto-drawer-body" id="cestoBody">
+
+      <div class="cesto-empty" id="cestoEmpty">
+
+        <p>
+          ups!<br>
+          Não tens nada no cesto.
+        </p>
+
+        <a href="catalogo.html">
+          ver catálogo
+        </a>
+
+      </div>
+
+
+      <div id="cestoItems"></div>
+
+    </div>
+
+
+    <div class="cesto-drawer-footer">
+
+      <div class="summary-line">
+
+        <span>
+          Subtotal
+        </span>
+
+        <span id="cestoSubtotal">
+          0,00€
+        </span>
+
+      </div>
+
+
+      <div class="summary-line">
+
+        <span>
+          Portes
+        </span>
+
+        <span id="cestoShipping">
+          0,00€
+        </span>
+
+      </div>
+
+
+      <div class="summary-line total">
+
+        <span>
+          Total
+        </span>
+
+        <span class="amount" id="cestoTotal">
+          0,00€
+        </span>
+
+      </div>
+
+
+      <button type="button" class="checkout-btn" id="checkoutBtn">
+        finalizar compra
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+
+  <footer class="footer-grid">
+
+    <div class="footer-col contact">
+
+      <span class="footer-label">
+        Contacto:
+      </span>
+
+      <a href="mailto:zoologiaexperimental@gmail.com" class="footer-value">
+        zoologiaexperimental@gmail.com
+      </a>
+
+    </div>
+
+    <nav class="footer-nav">
+
+      <a href="catalogo.html">
+        catálogo
+      </a>
+
+      <a href="sobre.html">
+        sobre
+      </a>
+
+      <a href="#" class="cesto-trigger">
+        cesto
+      </a>
+
+    </nav>
+
+  </footer>
+
+
+  <!-- MAIN JS — ONLY ONCE -->
+  <script src="main.js"></script>
+
+</body>
+
+</html>

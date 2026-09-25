@@ -958,12 +958,12 @@ function setupCatalogInfiniteScroll() {
         card.style.left = col.left;
         card.style.width = col.width;
         card.style.marginLeft = '-2px';
-        card.innerHTML = `
-          <a href="item.html">
-            <p class="product-price">${product.price}</p>
-            <img class="product-cover" src="${product.img}" alt="">
-            <p class="product-title">${product.title}</p>
-          </a>`;
+    card.innerHTML = `
+  <a href="item.html?id=${(rowsLoaded * 3 + i) % 2 + 1}">
+    <p class="product-price">${product.price}</p>
+    <img class="product-cover" src="${product.img}" alt="">
+    <p class="product-title">${product.title}</p>
+  </a>`;
         grid.insertBefore(card, sentinel);
       });
 

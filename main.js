@@ -4,7 +4,6 @@
 // =========================================================
 
 const CART_KEY = 'zoo-cart';
-const SHIPPING_COST = 5.00;
 
 
 // =========================================================
@@ -71,8 +70,24 @@ function getSubtotal(cart) {
   }, 0);
 }
 
+const SHIPPING_KEY = 'zoo-shipping';
+
+const SHIPPING_OPTIONS = {
+  normal:    { label: 'correio normal',    price: 1.5 },
+  registado: { label: 'correio registado', price: 4.0 }
+};
+
+function getShippingMethod() {
+  const method = localStorage.getItem(SHIPPING_KEY);
+  return SHIPPING_OPTIONS[method] ? method : 'normal';
+}
+
 function getShipping(cart) {
-  return cart.length > 0 ? SHIPPING_COST : 0;
+  return cart.length > 0 ? SHIPPING_OPTIONS[getShippingMethod()].price : 0;
+}
+
+function getShippingLabel() {
+  return `Portes (${SHIPPING_OPTIONS[getShippingMethod()].label})`;
 }
 
 function getTotal(cart) {
@@ -192,6 +207,9 @@ function openCartDrawer() {
     return;
   }
 
+  showCartView();
+  hideSuccess();
+
   drawer.classList.add('open');
 
   if (backdrop) {
@@ -277,6 +295,8 @@ function updateCartDrawer() {
   if (!itemsContainer) return;
 
   itemsContainer.innerHTML = '';
+
+  updateCheckoutTotals();
 
   // EMPTY CART
   if (cart.length === 0) {
@@ -412,9 +432,163 @@ function updateCartDrawer() {
     totalElement.textContent =
       formatPrice(total);
   }
+  const shippingLabel = document.getElementById('cestoShippingLabel');
+  if (shippingLabel) {
+    shippingLabel.textContent = cart.length > 0 ? getShippingLabel() : 'Portes';
+  }
 }
 
 
+// =========================================================
+// CHECKOUT (INSIDE CART DRAWER)
+// =========================================================
+
+function showCartView() {
+  document.getElementById('cestoViewCart').hidden = false;
+  document.getElementById('checkoutForm').hidden = true;
+  document.getElementById('cestoBack').hidden = true;
+  document.getElementById('cestoTitle').textContent = 'cesto';
+}
+
+function showCheckoutView() {
+  if (getCart().length === 0) return;
+
+  document.getElementById('cestoViewCart').hidden = true;
+  document.getElementById('checkoutForm').hidden = false;
+  document.getElementById('cestoBack').hidden = false;
+  document.getElementById('cestoTitle').textContent = 'finalizar compra';
+
+  document.querySelectorAll('input[name="envio"]').forEach(r => {
+    r.checked = r.value === getShippingMethod();
+  });
+
+  document.querySelector('#checkoutForm .cesto-drawer-body').scrollTop = 0;
+  updateCheckoutTotals();
+}
+
+function updateCheckoutTotals() {
+  const sub = document.getElementById('coSubtotal');
+  if (!sub) return;
+
+  const cart = getCart();
+  sub.textContent = formatPrice(getSubtotal(cart));
+  document.getElementById('coShippingLabel').textContent = getShippingLabel();
+  document.getElementById('coShipping').textContent = formatPrice(getShipping(cart));
+  document.getElementById('coTotal').textContent = formatPrice(getTotal(cart));
+}
+
+function showSuccess() {
+  const box = document.getElementById('cestoSuccess');
+  if (!box) {
+    console.error('#cestoSuccess não existe nesta página.');
+    return;
+  }
+  box.hidden = false;
+}
+
+function hideSuccess() {
+  const box = document.getElementById('cestoSuccess');
+  if (box) box.hidden = true;
+}
+
+function setupCheckout() {
+
+  const form = document.getElementById('checkoutForm');
+  if (!form) return;
+
+  const giftToggle = document.getElementById('giftToggle');
+  const giftFields = document.getElementById('giftFields');
+  const errorBox   = document.getElementById('formError');
+
+   // back arrow
+  const backBtn = document.getElementById('cestoBack');
+  if (backBtn) backBtn.addEventListener('click', showCartView);
+
+  // success popup close
+  const successClose = document.getElementById('cestoSuccessClose');
+  if (successClose) successClose.addEventListener('click', closeCartDrawer);
+
+  // shipping method
+  form.querySelectorAll('input[name="envio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      localStorage.setItem(SHIPPING_KEY, radio.value);
+      updateCartDrawer();       // also refreshes the checkout totals
+    });
+  });
+
+  // gift address
+  giftToggle.addEventListener('change', () => {
+    giftFields.hidden = !giftToggle.checked;
+    giftFields.querySelectorAll('input').forEach(i => {
+      i.required = giftToggle.checked;
+      if (!giftToggle.checked) i.classList.remove('invalid');
+    });
+  });
+
+  // submit
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    errorBox.textContent = '';
+
+    const inputs = form.querySelectorAll(
+      'input[type="text"], input[type="email"], input[type="tel"]'
+    );
+    let firstInvalid = null;
+
+    inputs.forEach(input => {
+      const skip = input.closest('#giftFields') && !giftToggle.checked;
+      const value = input.value.trim();
+      let ok = true;
+
+      if (!skip) {
+        if (input.required && !value) ok = false;
+        if (value && input.pattern && !new RegExp(`^${input.pattern}$`).test(value)) ok = false;
+        if (value && input.type === 'email' && !input.checkValidity()) ok = false;
+      }
+
+      input.classList.toggle('invalid', !ok);
+      if (!ok && !firstInvalid) firstInvalid = input;
+    });
+
+    if (firstInvalid) {
+      errorBox.textContent = 'Verifica os campos assinalados.';
+      firstInvalid.focus();
+      return;
+    }
+
+    const cart = getCart();
+    if (cart.length === 0) return;
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    const order = {
+      date: new Date().toISOString(),
+      customer: {
+        nome: data.nome, email: data.email, telefone: data.telefone,
+        nif: data.nif, morada: data.morada, cp: data.cp, localidade: data.localidade
+      },
+      gift: giftToggle.checked
+        ? { nome: data.gNome, morada: data.gMorada, cp: data.gCp, localidade: data.gLocalidade }
+        : null,
+           shipping: { method: getShippingMethod(), price: getShipping(cart) },
+      payment: data.pagamento,
+      items: cart,
+      subtotal: getSubtotal(cart),
+      total: getTotal(cart)
+    };
+
+    // TODO: send `order` to your backend / payment provider here
+    console.log('ORDER', order);
+
+    // clear everything and show the popup
+    localStorage.removeItem(CART_KEY);
+    localStorage.removeItem(SHIPPING_KEY);
+    form.reset();
+    giftFields.hidden = true;
+    updateCartDrawer();
+    showCartView();
+    showSuccess();
+  });
+}
 // =========================================================
 // ITEM PAGE
 // =========================================================
@@ -663,8 +837,7 @@ function setupCartEvents() {
           return;
         }
 
-        window.location.href =
-          'checkout.html';
+        showCheckoutView();
 
       }
 
@@ -958,7 +1131,7 @@ function setupCatalogInfiniteScroll() {
         card.style.left = col.left;
         card.style.width = col.width;
         card.style.marginLeft = '-2px';
-    card.innerHTML = `
+      card.innerHTML = `
   <a href="item.html?id=${(rowsLoaded * 3 + i) % 2 + 1}">
     <p class="product-price">${product.price}</p>
     <img class="product-cover" src="${product.img}" alt="">
@@ -1102,6 +1275,7 @@ document.addEventListener(
   function() {
     updateCartDrawer();
     setupCartEvents();
+    setupCheckout();
     setupItemPage();
     setupCatalogFilters();
     applyTipoFromURL();

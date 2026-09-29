@@ -207,9 +207,7 @@ function openCartDrawer() {
     return;
   }
 
-  showCartView();
-  hideSuccess();
-
+  // Open first so incomplete checkout markup cannot block cart feedback.
   drawer.classList.add('open');
 
   if (backdrop) {
@@ -224,6 +222,9 @@ function openCartDrawer() {
   document.body.classList.add(
     'cesto-open'
   );
+
+  showCartView();
+  hideSuccess();
 }
 
 
@@ -444,37 +445,146 @@ function updateCartDrawer() {
 // =========================================================
 
 function showCartView() {
-  document.getElementById('cestoViewCart').hidden = false;
-  document.getElementById('checkoutForm').hidden = true;
-  document.getElementById('cestoBack').hidden = true;
-  document.getElementById('cestoTitle').textContent = 'cesto';
+  const cartView = document.getElementById('cestoViewCart');
+  const checkoutForm = document.getElementById('checkoutForm');
+  const backButton = document.getElementById('cestoBack');
+  const title = document.getElementById('cestoTitle');
+
+  if (cartView) cartView.hidden = false;
+  if (checkoutForm) checkoutForm.hidden = true;
+  if (backButton) backButton.hidden = true;
+  if (title) title.textContent = 'cesto';
 }
 
 function showCheckoutView() {
   if (getCart().length === 0) return;
 
-  document.getElementById('cestoViewCart').hidden = true;
-  document.getElementById('checkoutForm').hidden = false;
-  document.getElementById('cestoBack').hidden = false;
-  document.getElementById('cestoTitle').textContent = 'finalizar compra';
+  const cartView = document.getElementById('cestoViewCart');
+  const checkoutForm = document.getElementById('checkoutForm');
+
+  if (!cartView || !checkoutForm) return;
+
+  cartView.hidden = true;
+  checkoutForm.hidden = false;
+
+  const backButton = document.getElementById('cestoBack');
+  const title = document.getElementById('cestoTitle');
+  if (backButton) backButton.hidden = false;
+  if (title) title.textContent = 'finalizar compra';
 
   document.querySelectorAll('input[name="envio"]').forEach(r => {
     r.checked = r.value === getShippingMethod();
   });
 
-  document.querySelector('#checkoutForm .cesto-drawer-body').scrollTop = 0;
+  const checkoutBody = checkoutForm.querySelector('.cesto-drawer-body');
+  if (checkoutBody) checkoutBody.scrollTop = 0;
   updateCheckoutTotals();
 }
 
 function updateCheckoutTotals() {
-  const sub = document.getElementById('coSubtotal');
-  if (!sub) return;
-
   const cart = getCart();
-  sub.textContent = formatPrice(getSubtotal(cart));
-  document.getElementById('coShippingLabel').textContent = getShippingLabel();
-  document.getElementById('coShipping').textContent = formatPrice(getShipping(cart));
-  document.getElementById('coTotal').textContent = formatPrice(getTotal(cart));
+  const subtotal = document.getElementById('coSubtotal');
+  const shippingLabel = document.getElementById('coShippingLabel');
+  const shipping = document.getElementById('coShipping');
+  const total = document.getElementById('coTotal');
+
+  if (subtotal) subtotal.textContent = formatPrice(getSubtotal(cart));
+  if (shippingLabel) shippingLabel.textContent = getShippingLabel();
+  if (shipping) shipping.textContent = formatPrice(getShipping(cart));
+  if (total) total.textContent = formatPrice(getTotal(cart));
+}
+
+// Add the shared checkout UI to pages that only contain the basic cart drawer.
+function ensureCheckoutMarkup() {
+  const drawer = document.getElementById('cestoDrawer');
+  if (!drawer || document.getElementById('checkoutForm')) return;
+
+  const cartBody = drawer.querySelector('.cesto-drawer-body');
+  const cartFooter = drawer.querySelector('.cesto-drawer-footer');
+  if (!cartBody || !cartFooter) return;
+
+  const header = drawer.querySelector('.cesto-drawer-header');
+  const heading = header?.querySelector('h2');
+  if (heading && !document.getElementById('cestoBack')) {
+    heading.id = 'cestoTitle';
+
+    const headerLeft = document.createElement('div');
+    headerLeft.className = 'cesto-header-left';
+
+    const backButton = document.createElement('button');
+    backButton.type = 'button';
+    backButton.className = 'cesto-back';
+    backButton.id = 'cestoBack';
+    backButton.setAttribute('aria-label', 'Voltar ao cesto');
+    backButton.textContent = '←';
+    backButton.hidden = true;
+
+    header.insertBefore(headerLeft, heading);
+    headerLeft.append(backButton, heading);
+  }
+
+  const cartView = document.createElement('div');
+  cartView.className = 'cesto-view';
+  cartView.id = 'cestoViewCart';
+  drawer.insertBefore(cartView, cartBody);
+  cartView.append(cartBody, cartFooter);
+
+  const form = document.createElement('form');
+  form.className = 'cesto-view';
+  form.id = 'checkoutForm';
+  form.noValidate = true;
+  form.hidden = true;
+  form.innerHTML = `
+    <div class="cesto-drawer-body">
+      <h3 class="checkout-section">Faturação</h3>
+      <div class="form-grid">
+        <div class="form-field full"><label for="nome">Nome</label><input id="nome" name="nome" type="text" autocomplete="name" required></div>
+        <div class="form-field full"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="form-field"><label for="telefone">Telefone</label><input id="telefone" name="telefone" type="tel" autocomplete="tel" required></div>
+        <div class="form-field"><label for="nif">NIF</label><input id="nif" name="nif" type="text" inputmode="numeric" maxlength="9" pattern="\\d{9}" required></div>
+        <div class="form-field full"><label for="morada">Morada</label><input id="morada" name="morada" type="text" autocomplete="street-address" required></div>
+        <div class="form-field"><label for="cp">Código postal</label><input id="cp" name="cp" type="text" placeholder="0000-000" pattern="\\d{4}-\\d{3}" maxlength="8" autocomplete="postal-code" required></div>
+        <div class="form-field"><label for="localidade">Localidade</label><input id="localidade" name="localidade" type="text" autocomplete="address-level2" required></div>
+      </div>
+
+      <h3 class="checkout-section">Prenda?</h3>
+      <label class="check-line"><input type="checkbox" id="giftToggle"><span>é uma prenda — enviar para outra morada</span></label>
+      <div class="form-grid" id="giftFields" hidden>
+        <div class="form-field full"><label for="gNome">Nome do destinatário</label><input id="gNome" name="gNome" type="text"></div>
+        <div class="form-field full"><label for="gMorada">Morada de entrega</label><input id="gMorada" name="gMorada" type="text"></div>
+        <div class="form-field"><label for="gCp">Código postal</label><input id="gCp" name="gCp" type="text" placeholder="0000-000" pattern="\\d{4}-\\d{3}" maxlength="8"></div>
+        <div class="form-field"><label for="gLocalidade">Localidade</label><input id="gLocalidade" name="gLocalidade" type="text"></div>
+      </div>
+
+      <h3 class="checkout-section">Envio</h3>
+      <label class="radio-line"><input type="radio" name="envio" value="normal" checked><span>Correio normal</span><span class="radio-price">1,50€</span></label>
+      <label class="radio-line"><input type="radio" name="envio" value="registado"><span>Correio registado</span><span class="radio-price">4,00€</span></label>
+    </div>
+    <div class="cesto-drawer-footer">
+      <p class="form-error" id="formError" role="alert"></p>
+      <div class="summary-line"><span>Subtotal</span><span id="coSubtotal">0,00€</span></div>
+      <div class="summary-line"><span id="coShippingLabel">Portes</span><span id="coShipping">0,00€</span></div>
+      <div class="summary-line total"><span>Total</span><span class="amount" id="coTotal">0,00€</span></div>
+      <button type="submit" class="checkout-btn" id="placeOrderBtn">confirmar encomenda</button>
+    </div>
+  `;
+  cartView.after(form);
+
+  const success = document.createElement('div');
+  success.className = 'cesto-success';
+  success.id = 'cestoSuccess';
+  success.setAttribute('role', 'dialog');
+  success.setAttribute('aria-live', 'polite');
+  success.hidden = true;
+  success.innerHTML = `
+    <div class="cesto-success-box">
+      <div class="cesto-success-icon">✓</div>
+      <h3>encomenda confirmada!</h3>
+      <p>Obrigado! Vais receber um email de confirmação em breve.</p>
+      <button type="button" class="checkout-btn" id="cestoSuccessClose">fechar</button>
+    </div>
+  `;
+  form.after(success);
 }
 
 function showSuccess() {
@@ -494,11 +604,11 @@ function hideSuccess() {
 function setupCheckout() {
 
   const form = document.getElementById('checkoutForm');
-  if (!form) return;
-
   const giftToggle = document.getElementById('giftToggle');
   const giftFields = document.getElementById('giftFields');
-  const errorBox   = document.getElementById('formError');
+  const errorBox = document.getElementById('formError');
+
+  if (!form || !giftToggle || !giftFields || !errorBox) return;
 
    // back arrow
   const backBtn = document.getElementById('cestoBack');
@@ -1240,28 +1350,17 @@ function setupSearch() {
   searchInput.addEventListener('keydown', function(event) {
 
     if (event.key === 'Escape') {
-
       searchCell.classList.remove('search-open');
-
       searchInput.blur();
-
-    }
-
-  });
-
-
-  searchInput.addEventListener('keydown', function(event) {
-
-    if (event.key !== 'Enter') {
       return;
     }
+
+    if (event.key !== 'Enter') return;
 
     const query =
       searchInput.value.trim();
 
-    if (!query) {
-      return;
-    }
+    if (!query) return;
 
     window.location.href =
       `catalogo.html?search=${encodeURIComponent(query)}`;
@@ -1273,6 +1372,7 @@ function setupSearch() {
 document.addEventListener(
   'DOMContentLoaded',
   function() {
+    ensureCheckoutMarkup();
     updateCartDrawer();
     setupCartEvents();
     setupCheckout();
@@ -1282,5 +1382,12 @@ document.addEventListener(
     setupCatalogInfiniteScroll();
     setupCurrentNavHighlight();
     setupSearch(); // <-- Kept inside DOMContentLoaded
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('checkout') === '1' && getCart().length > 0) {
+      updateCartDrawer();
+      openCartDrawer();
+      showCheckoutView();
+    }
   }
 );

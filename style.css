@@ -1497,12 +1497,6 @@ input[type="radio"] { accent-color: #F66B0E; }
     pointer-events: none;
   }
 
-  /*
-     Four columns only.
-     Using calc() prevents the borders from pushing
-     the columns outside the grid.
-  */
-
   .grid > .column:nth-child(2),
   .grid > .column:nth-child(4),
   .grid > .column:nth-child(6),
@@ -1664,11 +1658,6 @@ input[type="radio"] { accent-color: #F66B0E; }
     box-sizing: border-box;
   }
 
-  /*
-     IMPORTANT:
-     The email was being kept on one line.
-     This allows it to break naturally on small screens.
-  */
 
   .footer-value {
     display: block;

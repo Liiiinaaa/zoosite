@@ -18,7 +18,6 @@ const ITEMS = {
     price: 15.99,
     cover: 'https://images.unsplash.com/photo-1519791883288-dc8bd696e667?w=300&h=450&fit=crop',
     descriptionTop: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-    descriptionBottom: 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
     label: 'Contracapa',
     publisher: 'Porto',
     link: '#'
@@ -31,7 +30,6 @@ const ITEMS = {
     price: 15.99,
     cover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=450&fit=crop',
     descriptionTop: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
-    descriptionBottom: 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.',
     label: 'Contracapa',
     publisher: 'Porto',
     link: '#'
@@ -494,7 +492,7 @@ function updateCheckoutTotals() {
   if (total) total.textContent = formatPrice(getTotal(cart));
 }
 
-// Add the shared checkout UI to pages that only contain the basic cart drawer.
+// Checkout UI 
 function ensureCheckoutMarkup() {
   const drawer = document.getElementById('cestoDrawer');
   if (!drawer || document.getElementById('checkoutForm')) return;
@@ -547,8 +545,8 @@ function ensureCheckoutMarkup() {
         <div class="form-field"><label for="localidade">Localidade</label><input id="localidade" name="localidade" type="text" autocomplete="address-level2" required></div>
       </div>
 
-      <h3 class="checkout-section">Prenda?</h3>
-      <label class="check-line"><input type="checkbox" id="giftToggle"><span>é uma prenda — enviar para outra morada</span></label>
+      <h3 class="checkout-section">É um presente?</h3>
+      <label class="check-line"><input type="checkbox" id="giftToggle"><span>Enviar para uma morada diferente</span></label>
       <div class="form-grid" id="giftFields" hidden>
         <div class="form-field full"><label for="gNome">Nome do destinatário</label><input id="gNome" name="gNome" type="text"></div>
         <div class="form-field full"><label for="gMorada">Morada de entrega</label><input id="gMorada" name="gMorada" type="text"></div>
@@ -761,16 +759,6 @@ function setupItemPage() {
   if (descriptionTop) {
     descriptionTop.textContent =
       item.descriptionTop;
-  }
-
-  const descriptionBottom =
-    document.getElementById(
-      'itemDescriptionBottom'
-    );
-
-  if (descriptionBottom) {
-    descriptionBottom.textContent =
-      item.descriptionBottom;
   }
 
   const specLabel =
